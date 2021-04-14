@@ -1,9 +1,19 @@
 <template>
-  <div id="app">
-    <router-view/>
-  </div>
+  
 </template>
 
-<style lang="scss">
-  @import "~bootstrap/dist/css/bootstrap.min.css";
-</style>
+<script>
+
+
+export default {
+  name: 'App',
+
+  components: {
+
+  },
+
+  data: () => ({
+    //
+  }),
+};
+</script>
