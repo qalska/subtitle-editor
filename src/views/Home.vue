@@ -1,17 +1,58 @@
 <template>
     <div>
-        <div>
-            <router-link tag="button" :to="'/create'">Create new subtitle</router-link>
-        </div>
-        <Table />
+        <Create 
+        class="create"
+        @add-subtitle="addSubtitle"
+        />
+        <hr>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">№</th>
+                    <th scope="col">Start</th>
+                    <th scope="col">End</th>
+                    <th scope="col">Length</th>
+                    <th scope="col">Text</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                v-for="(subtitle, idx) of subtitles"
+                :key="subtitle.id"
+                >
+                    <th scope="row">{{idx + 1}}</th>
+                    <th>{{subtitle.start}} </th>
+                    <th>{{subtitle.end}}</th>
+                    <th>{{subtitle.len}}</th>
+                    <th>{{subtitle.text}}</th>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
 <script>
-import Table from '@/components/Table'
+import Create from '@/components/Create'
 export default {
     components: {
-        Table,
+        Create
     },
+    data() {
+        return {
+            subtitles: []
+        }
+    },
+    methods: {
+        addSubtitle(subtitle) {
+            this.subtitles.push(subtitle)
+        }
+    }
 }
 </script>
+
+<style scoped>
+    .create{
+        margin: 20px;
+        width: 30%;
+    }
+</style>

@@ -1,0 +1,132 @@
+
+    <!-- <div class="row">
+        <h2 class="row__h">Create new subtitle</h2>
+        <form class="form" @submit.prevent="submitHandler">
+            <div class="form__div">
+                <label for="start" class="form__label">Start:</label>
+                <input v-model="start" type="time" id="start" class="form__input form__input--time" name="start" step="1" required>
+            </div>
+            <div class="form__div">
+                <label for="end" class="form__label">End:</label>
+                <input v-model="end" type="time" id="end" class="form__input" name="end" step="1" required>
+            </div>
+            <div class="form__div">
+                <label for="text" class="form__label">Text:</label>
+                <textarea v-model="text" name="text" id="text" class="form__input" rows="5" required></textarea>
+            </div>
+            <button class="form__btn" type="submit">Create subtitle</button>
+        </form>
+    </div> -->
+<template>
+  <v-row justify="center">
+    <v-dialog
+      v-model="dialog"
+      persistent
+      max-width="600px"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          color="primary"
+          dark
+          v-bind="attrs"
+          v-on="on"
+        >
+          Create new subtitle
+        </v-btn>
+      </template>
+      <v-card>
+        <v-card-title>
+          <span class="headline">Create new subtitle</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
+              >
+                <v-text-field
+                  label="Start"
+                  required
+                  type="time"
+                  step="1"
+                  v-model="start"
+                ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
+              >
+                <v-text-field
+                  label="End"
+                  required
+                  type="time"
+                  step="1"
+                  v-model="end"
+                ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
+              >
+                <v-text-field
+                  label="Text"
+                  required
+                  v-model="text"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="dialog = false"
+          >
+            Close
+          </v-btn>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="[submitHandler(), dialog = false]"
+          >
+            Save
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-row>
+</template>
+
+<script>
+export default {
+    name: 'create',
+    data: () => ({
+        start: '',
+        end: '',
+        len: '',
+        text: '',
+        dialog: false,
+    }),
+    methods: {
+        submitHandler() {
+            const subtitle = {
+                id: Date.now(),
+                start: this.start,
+                end: this.end,
+                len: this.len,
+                text: this.text,
+            }
+            this.$emit('add-subtitle', subtitle)
+        }
+    },
+}
+</script>
+
+<style lang="scss" scoped>
+</style>
