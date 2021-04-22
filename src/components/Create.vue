@@ -1,22 +1,3 @@
-
-    <!-- <div class="row">
-        <h2 class="row__h">Create new subtitle</h2>
-        <form class="form" @submit.prevent="submitHandler">
-            <div class="form__div">
-                <label for="start" class="form__label">Start:</label>
-                <input v-model="start" type="time" id="start" class="form__input form__input--time" name="start" step="1" required>
-            </div>
-            <div class="form__div">
-                <label for="end" class="form__label">End:</label>
-                <input v-model="end" type="time" id="end" class="form__input" name="end" step="1" required>
-            </div>
-            <div class="form__div">
-                <label for="text" class="form__label">Text:</label>
-                <textarea v-model="text" name="text" id="text" class="form__input" rows="5" required></textarea>
-            </div>
-            <button class="form__btn" type="submit">Create subtitle</button>
-        </form>
-    </div> -->
 <template>
   <v-row justify="center">
     <v-dialog
@@ -109,7 +90,6 @@ export default {
     data: () => ({
         start: '',
         end: '',
-        len: '',
         text: '',
         dialog: false,
     }),
@@ -119,7 +99,6 @@ export default {
                 id: Date.now(),
                 start: this.start,
                 end: this.end,
-                len: this.len,
                 text: this.text,
             }
             this.$emit('add-subtitle', subtitle)
