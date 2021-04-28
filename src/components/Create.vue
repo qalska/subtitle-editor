@@ -11,6 +11,7 @@
           dark
           v-bind="attrs"
           v-on="on"
+          class="create"
         >
           Create new subtitle
         </v-btn>
