@@ -2,8 +2,7 @@
     <div class="content-row">
         <div class="subtitles">
             <div class="subtitles__top">
-                <Create 
-                class="create"
+                <SubtitleCreatorDialog
                 @add-subtitle="addSubtitle"
                 />
                 <v-file-input
@@ -13,7 +12,7 @@
                 ></v-file-input>
             </div>
             <hr>
-            <table class="subtitles__table table">
+            <table class="table">
                 <thead>
                     <tr>
                         <th scope="col">№</th>
@@ -41,22 +40,15 @@
                 <div class="video__wrapper" id="fileWrapper">
                 </div>
             </div>
-            <!-- <video controls src="" class="video__tag" id="myvideo">
-                <track
-                default
-                kind="captions"
-                srclang="en"
-                >
-            </video> -->
         </div>
     </div>
 </template>
 
 <script>
-import Create from '@/components/Create'
+import SubtitleCreatorDialog from '@/components/SubtitleCreatorDialog'
 export default {
     components: {
-        Create
+        SubtitleCreatorDialog,
     },
     data() {
         return {
@@ -102,17 +94,10 @@ export default {
         &__top{
             @include flex_center();
         }
-        &__bottom{
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-end;
-        }
-    }
-    .create{
-        margin: 20px;
     }
     .video{
         width: 50%;
+        margin: 0 20px;
         &__tag{
             margin: 15px 0 0 50px;
             width: 80%;
