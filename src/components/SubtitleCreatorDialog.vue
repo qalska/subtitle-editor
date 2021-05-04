@@ -34,7 +34,7 @@
                     required
                     type="time"
                     step="1"
-                    v-model="start"
+                    v-model="startTime"
                   ></v-text-field>
                 </v-col>
                 <v-col
@@ -47,7 +47,7 @@
                     required
                     type="time"
                     step="1"
-                    v-model="end"
+                    v-model="endTime"
                   ></v-text-field>
                 </v-col>
                 <v-col
@@ -89,10 +89,10 @@
 
 <script>
 export default {
-    name: 'create',
+    name: 'SubtitleCreatorDialog',
     data: () => ({
-        start: '',
-        end: '',
+        startTime: '',
+        endTime: '',
         text: '',
         dialog: false,
     }),
@@ -100,8 +100,8 @@ export default {
         submitHandler() {
             const subtitle = {
                 id: Date.now(),
-                start: this.start,
-                end: this.end,
+                startTime: this.startTime + ',000',
+                endTime: this.endTime + ',000',
                 text: this.text,
             }
             this.$emit('add-subtitle', subtitle)

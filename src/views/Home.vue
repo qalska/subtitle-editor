@@ -21,18 +21,27 @@
                         <th scope="col">Text</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody @change="onLoadSubtitles()">
                     <tr
                     v-for="(subtitle, idx) of subtitles"
                     :key="subtitle.id"
                     >
                         <th scope="row">{{idx + 1}}</th>
-                        <th>{{subtitle.start}} </th>
-                        <th>{{subtitle.end}}</th>
+                        <th>{{subtitle.startTime}} </th>
+                        <th>{{subtitle.endTime}}</th>
                         <th>{{subtitle.text}}</th>
                     </tr>
                 </tbody>
             </table>
+            <!-- <div class="subtitles__bottom">
+                <a 
+                href="#" 
+                download="sub.srt" 
+                class="btn"
+                id="link"
+                @click="onLoadSubtitles()"
+                >Download subtitles</a>
+            </div> -->
         </div>
         <div class="video">
             <div class="video__input">
@@ -67,6 +76,11 @@ export default {
 
                 fileWrapper.innerHTML = "";
                 const video = document.createElement("video");
+                const track = document.createElement("track");
+                track.default="default";
+                track.kind="captions";
+                track.srclang="en";
+                track.src=""
                 video.src = URL.createObjectURL(this.files[0]);
                 video.height = 300;
                 video.controls="controls";
@@ -74,8 +88,16 @@ export default {
                     URL.revokeObjectURL(this.src);
                 }
                 fileWrapper.appendChild(video);
+                video.appendChild(track);
                 fileElem.style.display = "none";
         },
+        onLoadSubtitles() {
+            const parser = require('subtitles-parser');
+            const data = parser.toSrt(this.subtitles);
+            let blob = new Blob([data], {type: 'text/plain'});
+            const subtitlesLink = URL.createObjectURL(blob);
+            document.querySelector("track").src = subtitlesLink;
+        }
     }
 }
 </script>
@@ -93,6 +115,11 @@ export default {
         width: 50%;
         &__top{
             @include flex_center();
+        }
+        &__bottom{
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
         }
     }
     .video{
