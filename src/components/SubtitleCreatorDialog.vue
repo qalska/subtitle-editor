@@ -91,6 +91,7 @@
 export default {
     name: 'SubtitleCreatorDialog',
     data: () => ({
+        id: 1,
         startTime: '',
         endTime: '',
         text: '',
@@ -99,7 +100,7 @@ export default {
     methods: {
         submitHandler() {
             const subtitle = {
-                id: Date.now(),
+                id: this.id++,
                 startTime: this.startTime + ',000',
                 endTime: this.endTime + ',000',
                 text: this.text,

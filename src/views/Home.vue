@@ -91,10 +91,12 @@ export default {
                 video.appendChild(track);
                 fileElem.style.display = "none";
         },
-        onLoadSubtitles() {
+    },
+    watch: {
+        subtitles: function onLoadSubtitles() {
             const parser = require('subtitles-parser');
             const data = parser.toSrt(this.subtitles);
-            let blob = new Blob([data], {type: 'text/plain'});
+            let blob = new Blob([String('WEBVTT \n' + data)], {type: 'text/plain'});
             const subtitlesLink = URL.createObjectURL(blob);
             document.querySelector("track").src = subtitlesLink;
         }
