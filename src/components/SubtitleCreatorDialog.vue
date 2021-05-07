@@ -1,102 +1,64 @@
 <template>
   <div class="subtitle-creator-dialog">
-    <v-row justify="center">
-      <v-dialog
-        v-model="dialog"
-        persistent
-        max-width="600px"
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            color="primary"
-            dark
-            v-bind="attrs"
-            v-on="on"
-            class="create"
-          >
-            Create new subtitle
-          </v-btn>
-        </template>
-        <v-card>
-          <v-card-title>
-            <span class="headline">Create new subtitle</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container>
-              <v-row>
-                <v-col
-                  cols="12"
-                  sm="6"
-                  md="4"
-                >
-                  <v-text-field
-                    label="Start"
-                    required
-                    type="time"
-                    step="1"
-                    v-model="startTime"
-                  ></v-text-field>
-                </v-col>
-                <v-col
-                  cols="12"
-                  sm="6"
-                  md="4"
-                >
-                  <v-text-field
-                    label="End"
-                    required
-                    type="time"
-                    step="1"
-                    v-model="endTime"
-                  ></v-text-field>
-                </v-col>
-                <v-col
-                  cols="12"
-                  sm="6"
-                  md="4"
-                >
-                  <v-text-field
-                    label="Text"
-                    required
-                    v-model="text"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              color="blue darken-1"
-              text
-              @click="dialog = false"
-            >
-              Close
-            </v-btn>
-            <v-btn
-              color="blue darken-1"
-              text
-              @click="[submitHandler(), dialog = false]"
-            >
-              Save
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-row>
+    <div class="top">
+      <button 
+      class="create btn btn-primary" 
+      type="submit"
+      v-on:click="showForm">Create new subtitle</button>
+      <div class="field">
+        <div class="field__wrapper">
+            <input name="file" type="file" id="field__file-2" class="field field__file">         
+            <label class="field__file-wrapper" for="field__file-2">
+              <div class="field__file-fake">Upload subtitles</div>
+              <div class="field__file-button">Browse</div>
+            </label>
+        </div>
+      </div>
+    </div>
+    <div class="row" v-show="isShow">
+      <hr>
+      <form class="row__form" @submit.prevent="submitHandler">
+        <div class="row__form-row">
+          <div class="form-group">
+            <label for="start-time">Start</label>
+            <input 
+            type="time" 
+            class="form-control" 
+            id="start-time"
+            v-model="startTime" 
+            step="1" 
+            required>
+          </div>
+          <div class="form-group">
+            <label for="end-time">End</label>
+            <input type="time" class="form-control" id="end-time" v-model="endTime" step="1" required>
+          </div>
+          <div class="form-group">
+            <label for="text">Text</label>
+            <input type="text" class="form-control" id="text" v-model="text" step="1" required>
+          </div>
+        </div>
+        <div class="row__form-btn">
+          <button type="button" class="btn btn-outline-danger" v-on:click="hideForm">Close</button>
+          <button type="submit" class="btn btn-outline-success" v-on:click="hideForm">Save</button>
+        </div>
+    </form>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
     name: 'SubtitleCreatorDialog',
-    data: () => ({
+    data() {
+      return {
         id: 1,
         startTime: '',
         endTime: '',
         text: '',
-        dialog: false,
-    }),
+        isShow: false,
+      }
+    },
     methods: {
         submitHandler() {
             const subtitle = {
@@ -106,12 +68,59 @@ export default {
                 text: this.text,
             }
             this.$emit('add-subtitle', subtitle)
-        }
+            this.startTime = ''
+            this.endTime = ''
+            this.text = ''
+        },
+        showForm() {
+            this.isShow = true;
+        },
+        hideForm() {
+            this.isShow = false;
+        },
     },
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
+  @import '@/scss/file-input.scss';
+  @import '@/scss/mixins.scss';
   .subtitle-creator-dialog{
     margin: 20px;
+  }
+  .top{
+    @include flex_space-between();
+  }
+  .btn{
+    &-primary{
+      color: white;
+    }
+    &-outline{
+      &-danger{
+        color: red;
+        margin-right: 20px;
+        &:hover{
+          color: white;
+        }
+      }
+      &-success{
+        color: green;
+        &:hover{
+          color: white;
+        }
+      }
+    }
+  }
+  .row{
+    &__form{
+      &-row{
+        margin: 20px 0;
+        @include flex_space-between();
+      }
+      &-btn{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+      }
+    }
   }
 </style>

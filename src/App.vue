@@ -16,5 +16,6 @@ export default {
   @import "~bootstrap/dist/css/bootstrap.min.css";
   div {
     font-family: 'Roboto', sans-serif;
+    font-size: 14px;
   }
 </style>
