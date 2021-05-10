@@ -1,7 +1,8 @@
 <template>
-  <div class="app" data-app>
+  <v-app>
     <router-view />
-  </div>
+  </v-app>
+
 </template>
 
 <script>
@@ -13,7 +14,6 @@ export default {
 </script>
 
 <style scoped>
-  @import "~bootstrap/dist/css/bootstrap.min.css";
   div {
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
