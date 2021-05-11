@@ -93,7 +93,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  @import '@/scss/file-input.scss';
   @import '@/scss/mixins.scss';
   .subtitle-creator-dialog{
     margin: 20px;

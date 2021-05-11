@@ -30,9 +30,9 @@
                         </thead>
                         <tbody>
                             <tr
-                            v-for="(subtitle, idx) of subtitles"
-                            :key="subtitle.id"
-                            v-show="isEditing = true">
+                                v-for="(subtitle, idx) of subtitles"
+                                :key="subtitle.startTime"
+                                v-show="!isEditing">
                                 <td class="subtitles__bottom-id" scope="row">
                                     {{ idx + 1 }}
                                 </td>
@@ -47,7 +47,7 @@
                                 </td>
                                 <td>
                                     <div class="subtitles__bottom-actions">
-                                        <v-btn icon text class="subtitles__bottom-edit" v-on:click="isEditing = true">
+                                        <v-btn icon text class="subtitles__bottom-edit" v-on:click="() => toggleForm(true)">
                                             <v-icon>{{ icons.mdiPencil }}</v-icon>
                                         </v-btn>
                                         <v-btn icon text class="subtitles__bottom-delete"
@@ -57,33 +57,33 @@
                                     </div>
                                 </td>
                             </tr>
-                            <tr v-show="!isEditing"
+                            <tr v-show="isEditing"
                             v-for="(subtitle, idx) of subtitles"
                             v-bind:key="idx">
                                 <td>
                                     <v-text-field
-                                    type="time"
-                                    id="start-time"
-                                    v-model="subtitle.startTime" 
-                                    step="1" 
-                                    required
+                                        type="time"
+                                        id="start-time"
+                                        v-model="subtitle.startTime" 
+                                        step="1" 
+                                        required
                                     ></v-text-field>
                                 </td>
                                 <td>
                                     <v-text-field
-                                    type="time"
-                                    id="end-time"
-                                    v-model="subtitle.endTime" 
-                                    step="1" 
-                                    required
+                                        type="time"
+                                        id="end-time"
+                                        v-model="subtitle.endTime" 
+                                        step="1" 
+                                        required
                                     ></v-text-field>
                                 </td>
                                 <td>
                                     <v-text-field
-                                    type="text"
-                                    id="text1"
-                                    v-model="subtitle.text" 
-                                    required
+                                        type="text"
+                                        id="text1"
+                                        v-model="subtitle.text" 
+                                        required
                                     ></v-text-field>
                                 </td>
                                 <td>
@@ -91,7 +91,7 @@
                                         text
                                         color="error"
                                         type="button"
-                                        v-on:click="isEditing = false">
+                                        v-on:click="() => toggleForm(false)">
                                         Close
                                     </v-btn>
                                 </td>
@@ -106,8 +106,21 @@
                 <v-file-input
                     accept="video/*"
                     label="Upload video"
+                    @change="onFileSelected"
+                    v-if="videoSrc == null"
                 ></v-file-input>
-                <div class="video__wrapper" id="fileWrapper">
+                <div 
+                    class="video__wrapper" 
+                    id="fileWrapper"
+                    v-else>
+                    <video v-bind:src="videoSrc" 
+                           height="300" 
+                           controls>
+                        <track v-bind:src="trackSrc" 
+                               default
+                               kind="captions"
+                               srclang="en" />
+                    </video>
                 </div>
             </div>
         </div>
@@ -127,7 +140,9 @@ export default {
     data() {
         return {
             subtitles: [],
-            files: [],
+            srtSrc: null,
+            videoSrc: null,
+            trackSrc: null,
             isEditing: false,
             icons: {
                 mdiPencil,
@@ -142,27 +157,15 @@ export default {
         deleteSubtitle(id) {
             this.subtitles.splice(id, 1);
         },
-        onFileSelected() {
-            this.files = this.$refs.myFiles.files;
-            const fileElem = document.getElementById("fileElem"),
-                fileWrapper = document.getElementById("fileWrapper");
-
-                fileWrapper.innerHTML = "";
-                const video = document.createElement("video");
-                const track = document.createElement("track");
-                track.default="default";
-                track.kind="captions";
-                track.srclang="en";
-                track.src=""
-                video.src = URL.createObjectURL(this.files[0]);
-                video.height = 300;
-                video.controls="controls";
-                video.onload = function() {
-                    URL.revokeObjectURL(this.src);
-                }
-                fileWrapper.appendChild(video);
-                video.appendChild(track);
-                fileElem.style.display = "none";
+        toggleForm(flag) {
+            this.isEditing = flag;
+        },
+        onFileSelected(e) {
+            const file = e;
+            this.videoSrc = URL.createObjectURL(file);
+            file.onload = function() {
+                URL.revokeObjectURL(this.videoSrc);
+            }
         },
     },
     watch: {
@@ -170,15 +173,13 @@ export default {
             const parser = require('subtitles-parser');
             const data = parser.toSrt(this.subtitles);
             let blob = new Blob([String('WEBVTT \n' + data)], {type: 'text/plain'});
-            const subtitlesLink = URL.createObjectURL(blob);
-            document.querySelector("track").src = subtitlesLink;
+            this.trackSrc = URL.createObjectURL(blob);
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
-    @import '@/scss/file-input.scss';
     @import '@/scss/mixins.scss';
     .content-row{
         display: flex;
