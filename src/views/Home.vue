@@ -32,7 +32,7 @@
                             <tr
                                 v-for="(subtitle, idx) of subtitles"
                                 :key="subtitle.startTime"
-                                v-show="!isEditing">
+                                v-show="!subtitle.isEditing">
                                 <td class="subtitles__bottom-id" scope="row">
                                     {{ idx + 1 }}
                                 </td>
@@ -47,19 +47,20 @@
                                 </td>
                                 <td>
                                     <div class="subtitles__bottom-actions">
-                                        <v-btn icon text class="subtitles__bottom-edit" v-on:click="() => toggleForm(true)">
+                                        <v-btn icon text class="subtitles__bottom-edit" 
+                                               @click="editSubtitle(idx)">
                                             <v-icon>{{ icons.mdiPencil }}</v-icon>
                                         </v-btn>
                                         <v-btn icon text class="subtitles__bottom-delete"
-                                        @click="deleteSubtitle()">
+                                               @click="deleteSubtitle(idx)">
                                             <v-icon>{{ icons.mdiDelete }}</v-icon>
                                         </v-btn>
                                     </div>
                                 </td>
                             </tr>
-                            <tr v-show="isEditing"
+                            <tr v-show="subtitle.isEditing"
                             v-for="(subtitle, idx) of subtitles"
-                            v-bind:key="idx">
+                            :key="idx">
                                 <td>
                                     <v-text-field
                                         type="time"
@@ -91,7 +92,7 @@
                                         text
                                         color="error"
                                         type="button"
-                                        v-on:click="() => toggleForm(false)">
+                                        @click="subtitle.isEditing = false">
                                         Close
                                     </v-btn>
                                 </td>
@@ -132,7 +133,9 @@ import {
     mdiPencil,
     mdiDelete,
   } from '@mdi/js'
+
 import SubtitleCreatorDialog from '@/components/SubtitleCreatorDialog'
+
 export default {
     components: {
         SubtitleCreatorDialog,
@@ -143,7 +146,6 @@ export default {
             srtSrc: null,
             videoSrc: null,
             trackSrc: null,
-            isEditing: false,
             icons: {
                 mdiPencil,
                 mdiDelete,
@@ -155,10 +157,11 @@ export default {
             this.subtitles.push(subtitle)
         },
         deleteSubtitle(id) {
-            this.subtitles.splice(id, 1);
+            this.subtitles.splice(id, 1)
         },
-        toggleForm(flag) {
-            this.isEditing = flag;
+        editSubtitle(id) {
+            let subtitle = this.subtitles[id];
+            subtitle.isEditing = true;
         },
         onFileSelected(e) {
             const file = e;

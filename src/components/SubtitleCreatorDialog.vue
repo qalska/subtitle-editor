@@ -4,13 +4,9 @@
       <v-btn
         color="accent"
         type="submit"
-        v-on:click="isShow = true"
+        @click="isShow = true"
         large
       >Create new subtitle</v-btn>
-      <v-file-input
-        accept=".vtt, .srt"
-        label="Upload subtitles"
-      ></v-file-input>
     </div>
     <div class="row" v-show="isShow">
       <hr>
@@ -48,14 +44,14 @@
           <v-btn
             text
             color="error"
-            v-on:click="isShow = false">
+            @click="isShow = false">
             Close
           </v-btn>
           <v-btn
             text
             color="success"
             type="submit"
-            v-on:click="isShow = false">
+            @click="isShow = false">
             Save
           </v-btn>
         </div>
@@ -83,6 +79,7 @@ export default {
                 startTime: this.startTime + '.000',
                 endTime: this.endTime + '.000',
                 text: this.text,
+                isEditing: false,
             }
             this.$emit('add-subtitle', subtitle)
             this.startTime = ''
@@ -98,24 +95,22 @@ export default {
     margin: 20px;
   }
   .top{
-    @include flex_space-between();
+    margin-bottom: 30px;
   }
   .row{
-    &__form{
-      &-row{
+    &__form-row{
         margin: 20px 0;
-      }
-      &-input{
-        @include flex_space-between();
-      }
-      &-time{
-        margin-left: 20px;
-      }
-      &-btn{
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-end;
-      }
+    }
+    &__form-input{
+      @include flex_space-between();
+    }
+    &__form-time{
+      margin-left: 20px;
+    }
+    &__form-btn{
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
     }
   }
 </style>
